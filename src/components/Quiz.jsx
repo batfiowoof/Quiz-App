@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+
+import Timer from "./Timer";
 
 import DUMMY_DATA from "../questions";
 import quizComplete from "../assets/quiz-complete.png";
@@ -10,10 +12,13 @@ export default function Quiz() {
 
   const quizIsOver = activeQuestionIndex >= DUMMY_DATA.length;
 
-  function handleSelectAnswer(selected) {
-    setAnswers([...answers, selected]);
-    console.log(answers);
-  }
+  const handleSelectAnswer = useCallback(function handleSelectAnswer(selected) {
+    setAnswers((prev) => [...prev, selected]);
+  }, []);
+
+  const handleSkipAnswer = useCallback(() => {
+    handleSelectAnswer(null);
+  }, [handleSelectAnswer]);
 
   if (quizIsOver) {
     return (
@@ -30,6 +35,11 @@ export default function Quiz() {
   return (
     <div id="quiz">
       <div id="question">
+        <Timer
+          key={activeQuestionIndex}
+          time={10000}
+          onTimeUp={handleSkipAnswer}
+        />
         <h2>{DUMMY_DATA[activeQuestionIndex].text}</h2>
         <ul id="answers">
           {shuffledAnswers.map((answer) => (
