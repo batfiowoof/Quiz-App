@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 
-import Timer from "./Timer";
+import Question from "./Question";
 
 import DUMMY_DATA from "../questions";
 import quizComplete from "../assets/quiz-complete.png";
@@ -49,45 +49,17 @@ export default function Quiz() {
     );
   }
 
-  const shuffledAnswers = [...DUMMY_DATA[activeQuestionIndex].answers];
-  shuffledAnswers.sort(() => Math.random() - 0.5);
-
   return (
     <div id="quiz">
-      <div id="question">
-        <Timer
-          key={activeQuestionIndex}
-          time={10000}
-          onTimeUp={handleSkipAnswer}
-        />
-        <h2>{DUMMY_DATA[activeQuestionIndex].text}</h2>
-        <ul id="answers">
-          {shuffledAnswers.map((answer) => {
-            const isSelected = answers[answers.length - 1] === answer;
-            let cssClasses = "";
-
-            if (answerState === "answered" && isSelected) {
-              cssClasses = "selected";
-            }
-            if (
-              (answerState === "correct" || answerState === "wrong") &&
-              isSelected
-            ) {
-              cssClasses = answerState;
-            }
-            return (
-              <li key={answer} className="answer">
-                <button
-                  onClick={() => handleSelectAnswer(answer)}
-                  className={cssClasses}
-                >
-                  {answer}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      <Question
+        questionText={DUMMY_DATA[activeQuestionIndex].text}
+        answers={DUMMY_DATA[activeQuestionIndex].answers}
+        onSelectAnswer={handleSelectAnswer}
+        answerState={answerState}
+        selected={answers[answers.length - 1]}
+        onSkip={handleSkipAnswer}
+        key={activeQuestionIndex}
+      />
     </div>
   );
 }
