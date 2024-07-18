@@ -1,9 +1,9 @@
 import { useState, useCallback } from "react";
 
 import Question from "./Question";
+import Summary from "./Summary";
 
 import DUMMY_DATA from "../questions";
-import quizComplete from "../assets/quiz-complete.png";
 
 export default function Quiz() {
   const [answers, setAnswers] = useState([]);
@@ -23,12 +23,7 @@ export default function Quiz() {
   }, []);
 
   if (quizIsOver) {
-    return (
-      <div id="summary">
-        <img src={quizComplete} alt="Quiz complete" />
-        <h2>Quiz complete!</h2>
-      </div>
-    );
+    return <Summary answers={answers} questions={DUMMY_DATA} />;
   }
 
   return (
